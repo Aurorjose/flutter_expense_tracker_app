@@ -49,9 +49,35 @@ class _AccountsViewState extends State<AccountsView>
             pinned: false,
             snap: false,
             elevation: 2.0,
-            title: Text('Dashboard'),
-            centerTitle: true,
-            actions: <Widget>[],
+            title: Text('Accounts'),
+            //centerTitle: true,
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: Row(
+                  children: <Widget>[
+                    BlocBuilder<AccountBloc, AccountEvent>(
+                      builder: (context, state) {
+                        double totalBalance = 0.0;
+                        if (state.data != null) {
+                          for (final account in (state.data as List<Account>)) {
+                            totalBalance += account.getBalance();
+                          }
+                        }
+
+                        return Text(
+                          '$totalBalance ${NumberFormat.simpleCurrency(
+                            locale: Localizations.localeOf(context).toString(),
+                          ).currencySymbol}',
+                          style: TextStyle(
+                              fontSize: 20.0, fontWeight: FontWeight.bold),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
           SliverList(
             //itemExtent: MediaQuery.of(context).size.height,
